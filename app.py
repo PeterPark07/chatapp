@@ -1,10 +1,12 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template
 from flask_socketio import SocketIO, send
 from datetime import datetime
+from flask_cors import CORS
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
-socketio = SocketIO(app)
+CORS(app)
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 messages = [
     {'username': 'Alice', 'message': 'Hello, everyone! I hope you are all having a great day!', 'time': '10:00 AM'},
