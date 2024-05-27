@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO, send, emit
-from datetime import datetime, timedelta
+from helper import get_current_time, get_current_date
 
 import eventlet
 eventlet.monkey_patch()
@@ -14,15 +14,6 @@ messages = list(messages_collection.find({}, {'_id': 0, 'username': 1, 'message'
 
 users_online = 0
 
-def get_current_time():
-    utc_now = datetime.utcnow()
-    time_plus_5_30 = utc_now + timedelta(hours=5, minutes=30)
-    return time_plus_5_30.strftime('%I:%M %p')
-
-def get_current_date():
-    current_date = datetime.utcnow() + timedelta(hours=5, minutes=30)
-    return current_date.strftime('%d %B, %Y')
-
 @app.route('/')
 def chat():
     messages = list(messages_collection.find({}, {'_id': 0, 'username': 1, 'message': 1, 'time': 1, 'date': 1}))
@@ -35,7 +26,7 @@ def chat():
             last_date = message['date']
     
     
-    return render_template('chat.html', messages=messages, current_date= get_current_date())
+    return render_template('chat.html', messages=messages)
 
 @socketio.on('connect')
 def handle_connect():
