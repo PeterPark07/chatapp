@@ -98,6 +98,9 @@
         document.addEventListener('DOMContentLoaded', (event) => {
             var socket = io();
             var username = prompt("Enter your username:");
+            if (!username) {
+                username = "user";
+            }
 
             socket.on('message', function(data) {
                 const chatMessages = document.querySelector('.chat-messages');
