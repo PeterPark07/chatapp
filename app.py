@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from flask_socketio import SocketIO, send
+from flask_socketio import SocketIO, send, emit
 from datetime import datetime, timedelta
 
 app = Flask(__name__)
@@ -15,6 +15,8 @@ messages = [
     {'username': 'Charlie', 'message': 'Well, I just got promoted at work! It’s been a long journey, but it finally paid off.', 'time': '10:05 AM'}
 ]
 
+users_online = 0
+
 def get_current_time_plus_5_30():
     utc_now = datetime.utcnow()
     time_plus_5_30 = utc_now + timedelta(hours=5, minutes=30)
@@ -23,6 +25,18 @@ def get_current_time_plus_5_30():
 @app.route('/')
 def chat():
     return render_template('chat.html', messages=messages, current_date=datetime.now().strftime('%B %d, %Y'))
+
+@socketio.on('connect')
+def handle_connect():
+    global users_online
+    users_online += 1
+    emit('users_online', users_online, broadcast=True)
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    global users_online
+    users_online -= 1
+    emit('users_online', users_online, broadcast=True)
 
 @socketio.on('message')
 def handle_message(data):
