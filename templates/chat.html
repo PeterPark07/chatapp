@@ -137,6 +137,9 @@
         <div id="users-online" class="users-online">Users online: 0</div>
         <div class="chat-messages">
             {% for message in messages %}
+                {% if message.new_date %}
+                    <div class="date">{{ message.new_date }}</div>
+                {% endif %}
                 <div class="message">
                     <span class="username">{{ message.username }}</span> 
                     <span class="time">{{ message.time }}</span>
