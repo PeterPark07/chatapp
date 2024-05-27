@@ -32,6 +32,7 @@ def chat():
     for message in messages:
         if message['date'] != last_date:
             message['new_date'] = message['date']
+            last_date = message['date']
     
     
     return render_template('chat.html', messages=messages, current_date= get_current_date())
