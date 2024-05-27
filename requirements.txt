@@ -3,3 +3,4 @@ gunicorn
 requests
 flask-socketio
 flask_cors
+eventlet
