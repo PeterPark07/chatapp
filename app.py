@@ -1,12 +1,10 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO, send
-from datetime import datetime
-from flask_cors import CORS
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
-CORS(app)
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app)
 
 messages = [
     {'username': 'Alice', 'message': 'Hello, everyone! I hope you are all having a great day!', 'time': '10:00 AM'},
@@ -17,15 +15,21 @@ messages = [
     {'username': 'Charlie', 'message': 'Well, I just got promoted at work! It’s been a long journey, but it finally paid off.', 'time': '10:05 AM'}
 ]
 
+def get_current_time_plus_5_30():
+    utc_now = datetime.utcnow()
+    time_plus_5_30 = utc_now + timedelta(hours=5, minutes=30)
+    return time_plus_5_30.strftime('%I:%M %p')
+
 @app.route('/')
 def chat():
     return render_template('chat.html', messages=messages, current_date=datetime.now().strftime('%B %d, %Y'))
 
 @socketio.on('message')
 def handle_message(data):
-    current_time = datetime.now().strftime('%I:%M %p')
+    current_time = get_current_time_plus_5_30()
     new_message = {'username': 'User', 'message': data, 'time': current_time}
     messages.append(new_message)
+    app.logger.info(f'New message: {new_message}')
     send(new_message, broadcast=True)
 
 if __name__ == '__main__':
