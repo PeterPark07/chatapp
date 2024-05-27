@@ -25,6 +25,7 @@ def get_current_date():
 
 @app.route('/')
 def chat():
+    messages = list(messages_collection.find({}, {'_id': 0, 'username': 1, 'message': 1, 'time': 1, 'date': 1}))
     return render_template('chat.html', messages=messages, current_date= get_current_date())
 
 @socketio.on('connect')
@@ -41,10 +42,7 @@ def handle_disconnect():
 
 @socketio.on('message')
 def handle_message(data):
-    time = get_current_time()
-    date = get_current_date()
-    new_message = {'username': 'User', 'message': data, 'time': time, 'date': date}
-    messages.append(new_message)
+    new_message = {'username': 'User', 'message': data, 'time': get_current_time(), 'date': get_current_date()}
     send(new_message, broadcast=True)
     messages_collection.insert_one(new_message)
 
