@@ -7,7 +7,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
 socketio = SocketIO(app)
 
-messages = list(messages_collection.find())
+messages = []
 
 users_online = 0
 
