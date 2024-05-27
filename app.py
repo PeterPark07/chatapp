@@ -11,6 +11,7 @@ app.config['SECRET_KEY'] = 'your_secret_key'
 socketio = SocketIO(app)
 
 messages = list(messages_collection.find())
+print(messages)
 
 users_online = 0
 
@@ -25,7 +26,7 @@ def get_current_date():
 
 @app.route('/')
 def chat():
-    return render_template('chat.html', messages=messages, current_date=datetime.now().strftime('%B %d, %Y'))
+    return render_template('chat.html', messages=messages, current_date= get_current_date())
 
 @socketio.on('connect')
 def handle_connect():
