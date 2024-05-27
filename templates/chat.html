@@ -120,7 +120,7 @@
                 e.preventDefault();
                 const usernameInput = this.elements['username'];
                 const messageInput = this.elements['message'];
-                const username = usernameInput.value;
+                const username = usernameInput.value || 'user';
                 const message = messageInput.value;
                 socket.send({username: username, message: message});
                 messageInput.value = '';
@@ -147,7 +147,7 @@
         </div>
         <div class="chat-footer">
             <form class="chat-input">
-                <input type="text" name="username" placeholder="Your username" required>
+                <input type="text" name="username" placeholder="Your username">
                 <input type="text" name="message" placeholder="Type a message..." required>
                 <button type="submit">Send</button>
             </form>
