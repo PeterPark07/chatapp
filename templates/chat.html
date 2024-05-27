@@ -82,6 +82,13 @@
             border-radius: 20px;
             cursor: pointer;
         }
+        .users-online {
+            text-align: center;
+            padding: 5px;
+            background-color: #e8f5e9;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+        }
     </style>
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
     <script>
@@ -101,7 +108,11 @@
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             });
 
-            document.querySelector('.chat-input').addEventListener('submit', function(e) {
+            socket.on('users_online', function(count) {
+                document.getElementById('users-online').innerText = `Users online: ${count}`;
+            });
+
+            document.querySelector('.chat-input form').addEventListener('submit', function(e) {
                 e.preventDefault();
                 const messageInput = this.elements['message'];
                 const message = messageInput.value;
@@ -116,6 +127,7 @@
         <div class="chat-header">
             <h2>Chat Application</h2>
         </div>
+        <div id="users-online" class="users-online">Users online: 0</div>
         <div class="chat-messages">
             <div class="date">{{ current_date }}</div>
             {% for message in messages %}
@@ -127,7 +139,7 @@
             {% endfor %}
         </div>
         <div class="chat-footer">
-            <form class="chat-input">
+            <form class="chat-input" action="" method="POST">
                 <input type="text" name="message" placeholder="Type a message...">
                 <button type="submit">Send</button>
             </form>
