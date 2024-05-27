@@ -45,8 +45,8 @@ def handle_message(data):
     date = get_current_date()
     new_message = {'username': 'User', 'message': data, 'time': time, 'date': date}
     messages.append(new_message)
-    app.logger.info(f'New message: {new_message}')
     send(new_message, broadcast=True)
+    messages_collection.insert_one(new_message)
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)
