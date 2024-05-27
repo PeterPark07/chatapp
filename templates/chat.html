@@ -115,14 +115,21 @@
             socket.on('users_online', function(count) {
                 document.getElementById('users-online').innerText = `Users online: ${count}`;
             });
+		
+	    document.querySelector('.chat-input').addEventListener('submit', function(e) {
+	    	e.preventDefault();
+		    const usernameInput = this.elements['username'];
+		    const messageInput = this.elements['message'];
+		    const username = usernameInput.value;
+		    const message = messageInput.value;
+		    socket.send({username: username, message: message});
+		    messageInput.value = '';
+	    });
 
-            document.querySelector('.chat-input').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const messageInput = this.elements['message'];
-                const message = messageInput.value;
-                socket.send(message);
-                messageInput.value = '';
-            });
+			
+			
+			
+			
         });
     </script>
 </head>

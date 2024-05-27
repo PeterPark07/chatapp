@@ -42,7 +42,9 @@ def handle_disconnect():
 
 @socketio.on('message')
 def handle_message(data):
-    new_message = {'username': 'User', 'message': data, 'time': get_current_time(), 'date': get_current_date()}
+    username = data.get('username', 'User')
+    
+    new_message = {'username': username, 'message': data['message'], 'time': get_current_time(), 'date': get_current_date()}
     send(new_message, broadcast=True)
     messages_collection.insert_one(new_message)
 
