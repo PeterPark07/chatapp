@@ -56,16 +56,14 @@
             color: #757575;
             margin-left: 5px;
         }
-		
-	.message .text {
-	    display: block;
-	    margin-top: 5px;
-	    margin-left: 20px;
-	    color: #333;
-	    max-width: 70vw;
-	    word-wrap: break-word;
-	}
-		
+        .message .text {
+            display: block;
+            margin-top: 5px;
+            margin-left: 20px;
+            color: #333;
+            max-width: 70vw;
+            word-wrap: break-word;
+        }
         .chat-input {
             display: flex;
             padding: 10px;
@@ -99,7 +97,8 @@
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             var socket = io();
-            
+            var username = prompt("Enter your username:");
+
             socket.on('message', function(data) {
                 const chatMessages = document.querySelector('.chat-messages');
                 const messageElement = document.createElement('div');
@@ -116,16 +115,14 @@
             socket.on('users_online', function(count) {
                 document.getElementById('users-online').innerText = `Users online: ${count}`;
             });
-		
+
             document.querySelector('.chat-input').addEventListener('submit', function(e) {
                 e.preventDefault();
                 const messageInput = this.elements['message'];
-                const username = 'user';
                 const message = messageInput.value;
                 socket.send({username: username, message: message});
                 messageInput.value = '';
             });
-			
         });
     </script>
 </head>
