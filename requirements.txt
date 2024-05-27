@@ -2,5 +2,5 @@ flask
 gunicorn
 requests
 flask-socketio
-flask_cors
+pymongo
 eventlet
