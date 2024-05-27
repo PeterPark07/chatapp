@@ -2,12 +2,15 @@ from flask import Flask, render_template
 from flask_socketio import SocketIO, send, emit
 from datetime import datetime, timedelta
 
+import eventlet
+eventlet.monkey_patch()
+from database import messages_collection
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
 socketio = SocketIO(app)
 
-messages = []
+messages = list(messages_collection.find())
 
 users_online = 0
 
