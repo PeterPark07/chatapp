@@ -101,7 +101,7 @@
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             });
 
-            document.querySelector('.chat-input form').addEventListener('submit', function(e) {
+            document.querySelector('.chat-input').addEventListener('submit', function(e) {
                 e.preventDefault();
                 const messageInput = this.elements['message'];
                 const message = messageInput.value;
@@ -127,7 +127,7 @@
             {% endfor %}
         </div>
         <div class="chat-footer">
-            <form class="chat-input" action="" method="POST">
+            <form class="chat-input">
                 <input type="text" name="message" placeholder="Type a message...">
                 <button type="submit">Send</button>
             </form>
