@@ -44,7 +44,6 @@ def handle_message(data):
     time = get_current_time()
     date = get_current_date()
     new_message = {'username': 'User', 'message': data, 'time': time, 'date': date}
-    messages_collection.insert_one(new_message)
     messages.append(new_message)
     app.logger.info(f'New message: {new_message}')
     send(new_message, broadcast=True)
