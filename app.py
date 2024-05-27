@@ -12,8 +12,6 @@ socketio = SocketIO(app)
 
 messages = list(messages_collection.find({}, {'_id': 0, 'username': 1, 'message': 1, 'time': 1, 'date': 1}))
 
-print(messages)
-
 users_online = 0
 
 def get_current_time():
@@ -43,9 +41,12 @@ def handle_disconnect():
 
 @socketio.on('message')
 def handle_message(data):
-    new_message = {'username': 'User', 'message': data, 'time': get_current_time(), 'date': get_current_date()}
+    time = get_current_time()
+    date = get_current_date()
+    new_message = {'username': 'User', 'message': data, 'time': time, 'date': date}
     messages_collection.insert_one(new_message)
     messages.append(new_message)
+    app.logger.info(f'New message: {new_message}')
     send(new_message, broadcast=True)
 
 if __name__ == '__main__':
