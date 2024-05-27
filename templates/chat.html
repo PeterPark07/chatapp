@@ -83,6 +83,33 @@
             cursor: pointer;
         }
     </style>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            var socket = io();
+
+            socket.on('message', function(data) {
+                const chatMessages = document.querySelector('.chat-messages');
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message');
+                messageElement.innerHTML = `
+                    <span class="username">${data.username}</span>
+                    <span class="time">${data.time}</span>
+                    <span class="text">${data.message}</span>
+                `;
+                chatMessages.appendChild(messageElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            });
+
+            document.querySelector('.chat-input form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const messageInput = this.elements['message'];
+                const message = messageInput.value;
+                socket.send(message);
+                messageInput.value = '';
+            });
+        });
+    </script>
 </head>
 <body>
     <div class="chat-container">
@@ -100,7 +127,7 @@
             {% endfor %}
         </div>
         <div class="chat-footer">
-            <form class="chat-input" action="/" method="POST">
+            <form class="chat-input" action="" method="POST">
                 <input type="text" name="message" placeholder="Type a message...">
                 <button type="submit">Send</button>
             </form>
