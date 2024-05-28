@@ -48,12 +48,18 @@
             margin-bottom: 15px;
             display: flex;
             flex-direction: column;
+            max-width: 70vw;
+            word-wrap: break-word;
         }
         .message.sent {
             align-items: flex-end;
         }
         .message.received {
             align-items: flex-start;
+        }
+        .message .header {
+            display: flex;
+            align-items: center;
         }
         .message .username {
             font-weight: bold;
@@ -62,15 +68,12 @@
         .message .time {
             font-size: 0.9em;
             color: #757575;
-            margin-left: 5px;
+            margin-left: 10px;
         }
         .message .text {
             display: block;
             margin-top: 5px;
-            margin-left: 20px;
             color: #333;
-            max-width: 70vw;
-            word-wrap: break-word;
         }
         .chat-input {
             display: flex;
@@ -115,8 +118,10 @@
                 const messageElement = document.createElement('div');
                 messageElement.classList.add('message', data.username === username ? 'sent' : 'received');
                 messageElement.innerHTML = `
-                    <span class="username">${data.username}</span>
-                    <span class="time">${data.time}</span>
+                    <div class="header">
+                        <span class="username">${data.username}</span>
+                        <span class="time">${data.time}</span>
+                    </div>
                     <span class="text">${data.message}</span>
                 `;
                 chatMessages.appendChild(messageElement);
@@ -149,7 +154,10 @@
                     <div class="date">{{ message.new_date }}</div>
                 {% endif %}
                 <div class="message {% if message.username == username %}sent{% else %}received{% endif %}">
-                    <span class="username">{{ message.username }}</span><span class="time">{{ message.time }}</span>
+                    <div class="header">
+                        <span class="username">{{ message.username }}</span>
+                        <span class="time">{{ message.time }}</span>
+                    </div>
                     <span class="text">{{ message.message }}</span>
                 </div>
             {% endfor %}
