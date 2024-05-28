@@ -138,6 +138,7 @@
                 const message = messageInput.value;
                 socket.send({username: username, message: message});
                 messageInput.value = '';
+                messageInput.focus();  // Keep the input field focused
             });
         });
     </script>
