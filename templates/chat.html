@@ -149,8 +149,7 @@
                     <div class="date">{{ message.new_date }}</div>
                 {% endif %}
                 <div class="message {% if message.username == username %}sent{% else %}received{% endif %}">
-                    <span class="username">{{ message.username }}</span> 
-                    <span class="time">{{ message.time }}</span>
+                    <span class="username">{{ message.username }}</span><span class="time">{{ message.time }}</span>
                     <span class="text">{{ message.message }}</span>
                 </div>
             {% endfor %}
