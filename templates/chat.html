@@ -93,13 +93,6 @@
             cursor: pointer;
             font-size: 16px;
         }
-        .theme-button {
-            position: absolute;
-            top: 10px;
-            left: 20px;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
         /* Light Theme */
         .light-theme body {
             background-color: #f1f1f1;
@@ -116,20 +109,20 @@
         .light-theme .chat-input button {
             background-color: #4caf50;
         }
-        /* Pink and Yellow Theme */
-        .pink-yellow-theme body {
+        /* Pink Theme */
+        .pink-theme body {
             background-color: #f7f9fc;
         }
-        .pink-yellow-theme .chat-messages {
+        .pink-theme .chat-messages {
             background-color: #fff3e0;
         }
-        .pink-yellow-theme .message .username {
+        .pink-theme .message .username {
             color: #ff4081;
         }
-        .pink-yellow-theme .chat-input {
+        .pink-theme .chat-input {
             background-color: #ff3b4f;
         }
-        .pink-yellow-theme .chat-input button {
+        .pink-theme .chat-input button {
             background-color: #ff5a92;
         }
     </style>
@@ -180,26 +173,30 @@
             var currentTheme = getCookie("theme") || "light-theme";
             applyTheme(currentTheme);
 
-            document.getElementById('theme-button').addEventListener('click', function() {
-                var newTheme = currentTheme === "light-theme" ? "pink-yellow-theme" : "light-theme";
-                applyTheme(newTheme);
-                currentTheme = newTheme;
-            });
-
             socket.on('message', function(data) {
-                const chatMessages = document.querySelector('.chat-messages');
-                const messageElement = document.createElement('div');
-                messageElement.classList.add('message', data.username === username ? 'sent' : 'received');
-                messageElement.innerHTML = `
-                    <div class="header">
-                        <span class="username">${data.username}</span>
-                        <span class="time">${data.time}</span>
-                    </div>
-                    <span class="text">${data.message}</span>
-                `;
+                // Handle incoming chat messages
+                if (data.message.startsWith('/theme')) {
+                    var themeCommand = data.message.split(' ')[1];
+                    if (themeCommand === '1') {
+                        applyTheme('light-theme');
+                    } else if (themeCommand === '2') {
+                        applyTheme('pink-theme');
+                    }
+                } else {
+                    const chatMessages = document.querySelector('.chat-messages');
+                    const messageElement = document.createElement('div');
+                    messageElement.classList.add('message', data.username === username ? 'sent' : 'received');
+                    messageElement.innerHTML = `
+                        <div class="header">
+                            <span class="username">${data.username}</span>
+                            <span class="time">${data.time}</span>
+                        </div>
+                        <span class="text">${data.message}</span>
+                    `;
 
-                chatMessages.appendChild(messageElement);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
+                    chatMessages.appendChild(messageElement);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
             });
 
             socket.on('users_online', function(count) {
@@ -220,7 +217,6 @@
 <body class="light-theme">
     <div class="chat-container">
         <div id="users-online" class="users-online">Users online: 0</div>
-        <button id="theme-button" class="theme-button">Switch Theme</button>
         <div class="chat-messages">
             {% for message in messages %}
                 {% if message.new_date %}
