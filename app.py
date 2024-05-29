@@ -46,7 +46,7 @@ def handle_message(data):
     
     if message.startswith('/theme'):
         theme_command = message.split(' ')[1]
-        if theme_command in ['1', '2', 'dark']:
+        if theme_command in ['1', '2', 'dark', 'blue']:
             emit('change_theme', theme_command, broadcast=True)
     
     new_message = {'username': username, 'message': message, 'time': get_current_time(), 'date': get_current_date()}
