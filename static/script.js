@@ -57,15 +57,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
         chatMessages.appendChild(messageElement);
         chatMessages.scrollTop = chatMessages.scrollHeight;
+    });
 
-        // Handle incoming chat messages
-        if (data.message.startsWith('/theme')) {
-            var themeCommand = data.message.split(' ')[1];
-            if (themeCommand === '1') {
-                applyTheme('light-theme');
-            } else if (themeCommand === '2') {
-                applyTheme('pink-theme');
-            }
+    socket.on('change_theme', function(themeCommand) {
+        if (themeCommand === '1') {
+            applyTheme('light-theme');
+        } else if (themeCommand === '2') {
+            applyTheme('pink-theme');
+        } else if (themeCommand === 'dark') {
+            applyTheme('dark-theme');
         }
     });
 
