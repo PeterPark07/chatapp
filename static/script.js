@@ -66,6 +66,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
             applyTheme('pink-theme');
         } else if (themeCommand === 'dark') {
             applyTheme('dark-theme');
+        } else if (themeCommand === 'blue') {
+            applyTheme('blue-theme');
         }
     });
 
