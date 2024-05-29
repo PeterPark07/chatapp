@@ -145,32 +145,17 @@
                 }
             }
 
-            var lastMessageTime = 0;
-            var lastUsername = '';
-
             socket.on('message', function(data) {
                 const chatMessages = document.querySelector('.chat-messages');
                 const messageElement = document.createElement('div');
-                const messageTime = new Date(data.time).getTime();
-
-                if (data.username === lastUsername && (messageTime - lastMessageTime) < (180000 * 60)) {
-                    messageElement.classList.add('message', data.username === username ? 'sent' : 'received');
-                    messageElement.innerHTML = `
-                        <span class="text">${data.message}</span>
-                    `;
-                } else {
-                    messageElement.classList.add('message', data.username === username ? 'sent' : 'received');
-                    messageElement.innerHTML = `
-                        <div class="header">
-                            <span class="username">${data.username}</span>
-                            <span class="time">${data.time}</span>
-                        </div>
-                        <span class="text">${data.message}</span>
-                    `;
-                }
-
-                lastMessageTime = messageTime;
-                lastUsername = data.username;
+                messageElement.classList.add('message', data.username === username ? 'sent' : 'received');
+                messageElement.innerHTML = `
+                    <div class="header">
+                        <span class="username">${data.username}</span>
+                        <span class="time">${data.time}</span>
+                    </div>
+                    <span class="text">${data.message}</span>
+                `;
 
                 chatMessages.appendChild(messageElement);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
