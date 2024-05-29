@@ -13,7 +13,6 @@
             padding: 0;
             font-family: 'Roboto', sans-serif;
             font-size: 18px;
-            background-color: #f1f1f1;
             display: flex;
             flex-direction: column;
         }
@@ -35,7 +34,6 @@
             flex: 1;
             padding: 20px;
             overflow-y: auto;
-            background-color: #ffffff;
             display: flex;
             flex-direction: column;
         }
@@ -60,7 +58,6 @@
         }
         .message .username {
             font-weight: bold;
-            color: #00796b;
         }
         .message .time {
             font-size: 0.8em;
@@ -79,7 +76,6 @@
             display: flex;
             padding: 10px;
             border-top: 1px solid #ddd;
-            background-color: #ffffff;
         }
         .chat-input input {
             flex: 1;
@@ -91,12 +87,50 @@
         }
         .chat-input button {
             padding: 10px 20px;
-            background-color: #4caf50;
             border: none;
             color: white;
             border-radius: 20px;
             cursor: pointer;
             font-size: 16px;
+        }
+        .theme-button {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        /* Light Theme */
+        .light-theme body {
+            background-color: #f1f1f1;
+        }
+        .light-theme .chat-messages {
+            background-color: #ffffff;
+        }
+        .light-theme .message .username {
+            color: #00796b;
+        }
+        .light-theme .chat-input {
+            background-color: #ffffff;
+        }
+        .light-theme .chat-input button {
+            background-color: #4caf50;
+        }
+        /* Pink and Yellow Theme */
+        .pink-yellow-theme body {
+            background-color: #f7f9fc;
+        }
+        .pink-yellow-theme .chat-messages {
+            background-color: #fff3e0;
+        }
+        .pink-yellow-theme .message .username {
+            color: #ff4081;
+        }
+        .pink-yellow-theme .chat-input {
+            background-color: #ffeb3b;
+        }
+        .pink-yellow-theme .chat-input button {
+            background-color: #ff4081;
         }
     </style>
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
@@ -126,6 +160,11 @@
             document.cookie = name + '=; Max-Age=-99999999; path=/';
         }
 
+        function applyTheme(theme) {
+            document.documentElement.className = theme;
+            setCookie("theme", theme, 7);
+        }
+
         document.addEventListener('DOMContentLoaded', (event) => {
             var socket = io();
             var username = getCookie("username");
@@ -137,6 +176,15 @@
                     username = "user";
                 }
             }
+
+            var currentTheme = getCookie("theme") || "light-theme";
+            applyTheme(currentTheme);
+
+            document.getElementById('theme-button').addEventListener('click', function() {
+                var newTheme = currentTheme === "light-theme" ? "pink-yellow-theme" : "light-theme";
+                applyTheme(newTheme);
+                currentTheme = newTheme;
+            });
 
             socket.on('message', function(data) {
                 const chatMessages = document.querySelector('.chat-messages');
@@ -169,9 +217,10 @@
         });
     </script>
 </head>
-<body>
+<body class="light-theme">
     <div class="chat-container">
         <div id="users-online" class="users-online">Users online: 0</div>
+        <button id="theme-button" class="theme-button">Switch Theme</button>
         <div class="chat-messages">
             {% for message in messages %}
                 {% if message.new_date %}
