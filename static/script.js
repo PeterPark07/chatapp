@@ -25,6 +25,7 @@ function eraseCookie(name) {
 
 function applyTheme(theme) {
     document.documentElement.className = theme;
+    setCookie("theme", theme, 7);
 }
 
 document.addEventListener('DOMContentLoaded', (event) => {
@@ -39,7 +40,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     }
 
-    applyTheme("light-theme");
+    var currentTheme = getCookie("theme") || "light-theme";
+    applyTheme(currentTheme);
 
     socket.on('message', function(data) {
         const chatMessages = document.querySelector('.chat-messages');
