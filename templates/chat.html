@@ -27,21 +27,23 @@
         .chat-header {
             color: #ffffff;
             text-align: center;
-            background-color: #00796b;
+            background-color: #ff4081;
             padding: 10px;
             font-weight: 500;
             font-size: 24px;
+            border-bottom: 4px solid #f50057;
         }
         .chat-messages {
             flex: 1;
             padding: 20px;
             overflow-y: auto;
-            background-color: #ffffff;
+            background-color: #fff3e0;
         }
         .date {
             text-align: center;
             margin: 10px 0;
-            color: #555;
+            color: #757575;
+            font-size: 14px;
         }
         .message {
             margin-bottom: 15px;
@@ -58,11 +60,11 @@
         }
         .message .username {
             font-weight: bold;
-            color: #00796b;
+            color: #ff4081;
         }
         .message .time {
             font-size: 0.8em;
-            color: #757575;
+            color: #9e9e9e;
             margin-left: 10px;
         }
         .message .text {
@@ -73,29 +75,31 @@
             max-width: 70vw;
             word-wrap: break-word;
             padding: 10px;
-            border-radius: 10px;
-            background-color: #e0f7fa;
+            border-radius: 20px;
+            background-color: #ffe0b2;
+            border: 1px solid #ffcc80;
         }
         .message.sent .text {
-            background-color: #c8e6c9;
+            background-color: #b2ebf2;
+            border: 1px solid #80deea;
         }
         .chat-input {
             display: flex;
             padding: 10px;
-            border-top: 1px solid #ddd;
-            background-color: #ffffff;
+            border-top: 2px solid #ffcc80;
+            background-color: #ffeb3b;
         }
         .chat-input input {
             flex: 1;
             padding: 10px;
-            border: 1px solid #ddd;
+            border: 2px solid #ffcc80;
             border-radius: 20px;
             margin-right: 10px;
             font-size: 16px;
         }
         .chat-input button {
             padding: 10px 20px;
-            background-color: #00796b;
+            background-color: #ff4081;
             border: none;
             color: white;
             border-radius: 20px;
@@ -105,7 +109,7 @@
         .users-online {
             text-align: center;
             padding: 5px;
-            background-color: #004d40;
+            background-color: #ff80ab;
             color: #ffffff;
         }
     </style>
