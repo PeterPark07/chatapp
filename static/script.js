@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     });
 
-    socket.on('toggle_dark_mode', function() {
+    socket.on('dark_mode', function() {
         DarkModeOn();
     });
 
