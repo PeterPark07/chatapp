@@ -28,8 +28,8 @@ function applyTheme(theme) {
     setCookie("theme", theme, 7);
 }
 
-function toggleDarkMode() {
-    document.body.classList.toggle('dark-mode');
+function DarkModeOn() {
+    document.body.classList.add('dark-mode');
     setCookie("dark_mode", document.body.classList.contains('dark-mode'), 7);
 }
 
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 
     socket.on('toggle_dark_mode', function() {
-        toggleDarkMode();
+        DarkModeOn();
     });
 
     socket.on('users_online', function(count) {
