@@ -28,6 +28,11 @@ function applyTheme(theme) {
     setCookie("theme", theme, 7);
 }
 
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    setCookie("dark_mode", document.body.classList.contains('dark-mode'), 7);
+}
+
 document.addEventListener('DOMContentLoaded', (event) => {
     var socket = io();
     var username = getCookie("username");
@@ -42,6 +47,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     var currentTheme = getCookie("theme") || "light-theme";
     applyTheme(currentTheme);
+
+    if (getCookie("dark_mode") === "true") {
+        document.body.classList.add('dark-mode');
+    }
 
     socket.on('message', function(data) {
         const chatMessages = document.querySelector('.chat-messages');
@@ -64,11 +73,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
             applyTheme('light-theme');
         } else if (themeCommand === '2') {
             applyTheme('pink-theme');
-        } else if (themeCommand === 'dark') {
-            applyTheme('dark-theme');
         } else if (themeCommand === '3') {
             applyTheme('blue-theme');
         }
+    });
+
+    socket.on('toggle_dark_mode', function() {
+        toggleDarkMode();
     });
 
     socket.on('users_online', function(count) {
