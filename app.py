@@ -58,7 +58,7 @@ def handle_message(data):
         if theme_command in ['1', '2', '3']:
             emit('change_theme', theme_command, broadcast=True)
         elif theme_command == 'dark':
-            emit('toggle_dark_mode', broadcast=True)
+            emit('dark_mode', broadcast=True)
         return
 
     # Check if the last message is from the same user and within a minute
