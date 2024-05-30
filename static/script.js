@@ -52,20 +52,35 @@ document.addEventListener('DOMContentLoaded', (event) => {
         document.body.classList.add('dark-mode');
     }
 
-    socket.on('message', function(data) {
+    function createMessageElement(data, isFollowed = false) {
         const chatMessages = document.querySelector('.chat-messages');
         const messageElement = document.createElement('div');
         messageElement.classList.add('message', data.username === username ? 'sent' : 'received');
-        messageElement.innerHTML = `
-            <div class="header">
-                <span class="username">${data.username}</span>
-                <span class="time">${data.time}</span>
-            </div>
-            <span class="text">${data.message}</span>
-        `;
+
+        if (!isFollowed) {
+            messageElement.innerHTML = `
+                <div class="header">
+                    <span class="username">${data.username}</span>
+                    <span class="time">${data.time}</span>
+                </div>
+                <span class="text">${data.message}</span>
+            `;
+        } else {
+            messageElement.innerHTML = `
+                <span class="text">${data.message}</span>
+            `;
+        }
 
         chatMessages.appendChild(messageElement);
         chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    socket.on('message', function(data) {
+        createMessageElement(data);
+    });
+
+    socket.on('followed_message', function(data) {
+        createMessageElement(data, true);
     });
 
     socket.on('change_theme', function(themeCommand) {
