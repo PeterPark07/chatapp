@@ -71,6 +71,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 <span class="text">${data.message}</span>
             `;
         } else {
+            messageElement.classList.add('followed');
             messageElement.innerHTML = `
                 <span class="text">${data.message}</span>
             `;
