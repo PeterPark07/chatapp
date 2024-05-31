@@ -54,12 +54,20 @@ def handle_message(data):
     current_date = get_current_date()
 
     if message.startswith('/theme'):
-        theme_command = message.split(' ')[1]
-        if theme_command in ['1', '2', '3']:
-            emit('change_theme', theme_command, broadcast=True)
-        elif theme_command == 'dark':
+        theme_commands = message.split()
+        
+        # Handle theme number (1, 2, 3)
+        if '1' in theme_commands:
+            emit('change_theme', '1', broadcast=True)
+        elif '2' in theme_commands:
+            emit('change_theme', '2', broadcast=True)
+        elif '3' in theme_commands:
+            emit('change_theme', '3', broadcast=True)
+        
+        # Handle dark/light mode
+        if 'dark' in theme_commands:
             emit('dark_mode', broadcast=True)
-        elif theme_command == 'light':
+        elif 'light' in theme_commands:
             emit('dark_mode_off', broadcast=True)
 
     # Check if the last message is from the same user and within a minute
