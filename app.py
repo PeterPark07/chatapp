@@ -67,12 +67,6 @@ def handle_message(data):
     if last_message_details['username'] == username and last_message_details['time'] == current_time:
         followed = 1
 
-    # Broadcast message as followed or not followed
-    if followed:
-        emit('followed_message', new_message, broadcast=True)
-    else:
-        send(new_message, broadcast=True)
-
     new_message = {
         'username': username,
         'message': message,
@@ -80,6 +74,13 @@ def handle_message(data):
         'date': current_date,
         'followed': followed
     }
+    
+    # Broadcast message as followed or not followed
+    if followed:
+        emit('followed_message', new_message, broadcast=True)
+    else:
+        send(new_message, broadcast=True)
+
 
     # Update last message details
     last_message_details = {
