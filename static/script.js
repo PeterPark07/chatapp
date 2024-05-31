@@ -5,16 +5,16 @@ function setCookie(name, value, days) {
         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
         expires = "; expires=" + date.toUTCString();
     }
-    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+    document.cookie = name + "=" + (value || "") + expires + "; path=/";
 }
 
 function getCookie(name) {
     var nameEQ = name + "=";
     var ca = document.cookie.split(';');
-    for(var i=0; i < ca.length; i++) {
+    for (var i = 0; i < ca.length; i++) {
         var c = ca[i];
-        while (c.charAt(0) == ' ') c = c.substring(1,c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
     }
     return null;
 }
@@ -28,9 +28,14 @@ function applyTheme(theme) {
     setCookie("theme", theme, 7);
 }
 
-function DarkModeOn() {
+function darkModeOn() {
     document.body.classList.add('dark-mode');
-    setCookie("dark_mode", document.body.classList.contains('dark-mode'), 7);
+    setCookie("dark_mode", true, 7);
+}
+
+function darkModeOff() {
+    document.body.classList.remove('dark-mode');
+    setCookie("dark_mode", false, 7);
 }
 
 document.addEventListener('DOMContentLoaded', (event) => {
@@ -94,7 +99,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 
     socket.on('dark_mode', function() {
-        DarkModeOn();
+        darkModeOn();
+    });
+
+    socket.on('dark_mode_off', function() {
+        darkModeOff();
     });
 
     socket.on('users_online', function(count) {
@@ -105,7 +114,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         e.preventDefault();
         const messageInput = this.elements['message'];
         const message = messageInput.value;
-        socket.send({username: username, message: message});
+        socket.send({ username: username, message: message });
         messageInput.value = '';
         messageInput.focus();  // Keep the input field focused
     });
