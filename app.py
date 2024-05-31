@@ -61,12 +61,17 @@ def handle_message(data):
             emit('dark_mode', broadcast=True)
         elif theme_command == 'light':
             emit('dark_mode_off', broadcast=True)
-        return
 
     # Check if the last message is from the same user and within a minute
     followed = 0
     if last_message_details['username'] == username and last_message_details['time'] == current_time:
         followed = 1
+
+    # Broadcast message as followed or not followed
+    if followed:
+        emit('followed_message', new_message, broadcast=True)
+    else:
+        send(new_message, broadcast=True)
 
     new_message = {
         'username': username,
@@ -82,11 +87,6 @@ def handle_message(data):
         'time': current_time
     }
 
-    # Broadcast message as followed or not followed
-    if followed:
-        emit('followed_message', new_message, broadcast=True)
-    else:
-        send(new_message, broadcast=True)
 
     # Insert message into the database
     messages_collection.insert_one(new_message)
