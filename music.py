@@ -13,16 +13,21 @@ def download_music(query, download_dir):
     if not os.path.exists(download_dir):
         os.makedirs(download_dir)
 
+    try:
     
-    url = search_youtube(query, max_results=1)[0]
-    ydl_opts = {
-        'format': 'bestaudio/best',
-        'outtmpl': os.path.join(download_dir, '%(title)s.%(ext)s'),
-        'noplaylist': True,
-    }
+        url = search_youtube(query, max_results=1)[0]
+        ydl_opts = {
+            'format': 'bestaudio/best',
+            'outtmpl': os.path.join(download_dir, '%(title)s.%(ext)s'),
+            'noplaylist': True,
+        }
+    
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info_dict = ydl.extract_info(url, download=True)
+            filename = ydl.prepare_filename(info_dict)
+    
+        return filename
 
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        info_dict = ydl.extract_info(url, download=True)
-        filename = ydl.prepare_filename(info_dict)
-
-    return filename
+    except Exception as e:
+        print(f"Error downloading music: {e}")
+        return None
