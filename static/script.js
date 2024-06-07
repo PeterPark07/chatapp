@@ -115,6 +115,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
         audioPlayer.play();
     });
 
+    // Socket.IO event listener for handling music download failure
+    socket.on('music_download_failed', function(data) {
+        alert(data.message);
+    });
+
+
     socket.on('users_online', function(count) {
         document.getElementById('users-online').innerText = `Users online: ${count}`;
     });
