@@ -1,6 +1,7 @@
 from youtubesearchpython import VideosSearch
 import yt_dlp
 import os
+import shutil
 
 def search_youtube(query, max_results=1):
     videos_search = VideosSearch(query, limit=max_results)
@@ -31,3 +32,9 @@ def download_music(query, download_dir):
     except Exception as e:
         print(f"Error downloading music: {e}")
         return None
+
+
+# Delete the folder and its contents
+def delete_music_folder(MUSIC_DIR):
+    if os.path.exists(MUSIC_DIR):
+        shutil.rmtree(MUSIC_DIR)
