@@ -73,16 +73,6 @@ def handle_message(data):
         elif 'light' in theme_commands:
             emit('dark_mode_off', broadcast=True)
 
-
-    if message.startswith('/play '):
-        query = message[6:]
-        filename = download_music(query, MUSIC_DIR)
-        if filename:
-            url = f'/{filename}'
-            emit('play_music', {'url': url}, broadcast=True)
-        else:
-            emit('message', {'message': 'Unable to download music.'})
-
     # Check if the last message is from the same user and within a minute
     followed = 0
     if last_message_details['username'] == username and last_message_details['time'] == current_time:
@@ -108,6 +98,15 @@ def handle_message(data):
         'username': username,
         'time': current_time
     }
+
+    if message.startswith('/play '):
+        query = message[6:]
+        filename = download_music(query, MUSIC_DIR)
+        if filename:
+            url = f'/{filename}'
+            emit('play_music', {'url': url}, broadcast=True)
+        else:
+            emit('music_download_failed', {'message': 'Unable to download music.'})
 
 
     # Insert message into the database
