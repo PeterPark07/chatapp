@@ -123,6 +123,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     });
 
+    // Socket.IO event listener for receiving pause music command
+    socket.on('unpause_music', function() {
+        const audioPlayer = document.getElementById('audioPlayer');
+        if (audioPlayer.paused) {
+            audioPlayer.play();
+        }
+    });
+    
 
     // Socket.IO event listener for handling music download failure
     socket.on('music_download_failed', function(data) {
