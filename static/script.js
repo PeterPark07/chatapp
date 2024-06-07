@@ -107,6 +107,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
         darkModeOff();
     });
 
+    // Socket.IO event listener for receiving music playback command
+    socket.on('play_music', function(data) {
+        const audioPlayer = document.getElementById('audioPlayer');
+        audioPlayer.style.display = 'block';
+        audioPlayer.src = data.url;
+        audioPlayer.play();
+    });
+
     socket.on('users_online', function(count) {
         document.getElementById('users-online').innerText = `Users online: ${count}`;
     });
