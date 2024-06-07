@@ -108,6 +108,9 @@ def handle_message(data):
         else:
             emit('music_download_failed', {'message': 'Unable to download music.'})
 
+    if message == '/pause':
+        emit('pause_music', broadcast=True)
+
 
     # Insert message into the database
     messages_collection.insert_one(new_message)
