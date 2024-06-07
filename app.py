@@ -15,10 +15,6 @@ users_online = 0
 # Directory to save downloaded music files
 MUSIC_DIR = 'static/music'
 
-# Ensure the music directory exists
-if not os.path.exists(MUSIC_DIR):
-    os.makedirs(MUSIC_DIR)
-
 # Store last message details in memory for quick access
 last_message_details = {
     'username': None,
