@@ -112,6 +112,7 @@ def handle_message(data):
         emit('pause_music', broadcast=True)
 
     if message == '/play':
+        print('plauyuy')
         emit('unpause_music', broadcast=True)
 
     # Insert message into the database
