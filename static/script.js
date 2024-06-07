@@ -130,7 +130,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
             audioPlayer.play();
         }
     });
-    
+
+    // Socket.IO event listener for receiving loop music command
+    socket.on('loop_music', function() {
+        const audioPlayer = document.getElementById('audioPlayer');
+        audioPlayer.loop = true; // Set loop property to true for continuous playback
+    });
+
 
     // Socket.IO event listener for handling music download failure
     socket.on('music_download_failed', function(data) {
