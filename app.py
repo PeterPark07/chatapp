@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO, send, emit
 from helper import get_current_time, get_current_date
+from music import download_music
 
 import eventlet
 eventlet.monkey_patch()
@@ -11,6 +12,12 @@ app.config['SECRET_KEY'] = 'your_secret_key'
 socketio = SocketIO(app)
 
 users_online = 0
+# Directory to save downloaded music files
+MUSIC_DIR = 'static/music'
+
+# Ensure the music directory exists
+if not os.path.exists(MUSIC_DIR):
+    os.makedirs(MUSIC_DIR)
 
 # Store last message details in memory for quick access
 last_message_details = {
@@ -69,6 +76,16 @@ def handle_message(data):
             emit('dark_mode', broadcast=True)
         elif 'light' in theme_commands:
             emit('dark_mode_off', broadcast=True)
+
+
+    if message.startswith('/play '):
+        query = message[6:]
+        filename = download_music(query, MUSIC_DIR)
+        if filename:
+            url = f'/{filename}'
+            emit('play_music', {'url': url}, broadcast=True)
+        else:
+            emit('message', {'message': 'Unable to download music.'})
 
     # Check if the last message is from the same user and within a minute
     followed = 0
