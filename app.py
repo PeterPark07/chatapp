@@ -101,6 +101,7 @@ def handle_message(data):
 
     if message.startswith('/play '):
         query = message[6:]
+        delete_music_folder(MUSIC_DIR)
         filename = download_music(query, MUSIC_DIR)
         if filename:
             url = f'/{filename}'
