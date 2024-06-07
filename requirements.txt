@@ -4,3 +4,5 @@ requests
 flask-socketio
 pymongo
 eventlet
+youtube-search-python 
+yt-dlp
