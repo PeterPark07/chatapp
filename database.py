@@ -5,4 +5,4 @@ import os
 mongo_client = MongoClient(os.getenv('mongodb'))
 database = mongo_client['chat']
 collection = os.getenv('collection')
-messages_collection = db[collection]
+messages_collection = database[collection]
