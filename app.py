@@ -114,6 +114,8 @@ def handle_message(data):
     if message == '/play':
         print('plauyuy')
         emit('unpause_music', broadcast=True)
+    if message == '/loop':
+        emit('loop_music', broadcast=True)
 
     # Insert message into the database
     messages_collection.insert_one(new_message)
