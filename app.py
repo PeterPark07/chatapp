@@ -111,6 +111,8 @@ def handle_message(data):
     if message == '/pause':
         emit('pause_music', broadcast=True)
 
+    if message == '/play':
+        emit('unpause_music', broadcast=True)
 
     # Insert message into the database
     messages_collection.insert_one(new_message)
