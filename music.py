@@ -9,6 +9,11 @@ def search_youtube(query, max_results=1):
     return video_urls
 
 def download_music(query, download_dir):
+    # Ensure the music directory exists
+    if not os.path.exists(download_dir):
+        os.makedirs(download_dir)
+
+    
     url = search_youtube(query, max_results=1)[0]
     ydl_opts = {
         'format': 'bestaudio/best',
