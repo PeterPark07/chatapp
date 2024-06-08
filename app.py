@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template
 from flask_socketio import SocketIO, send, emit
 from helper import get_current_time, get_current_date
 from music import download_music, delete_music_folder
@@ -15,7 +15,7 @@ socketio = SocketIO(app)
 MUSIC_DIR = 'static/music'
 
 # Track connected users and their visibility state
-users = {}
+users_online = 0
 
 # Store last message details in memory for quick access
 last_message_details = {
@@ -37,32 +37,17 @@ def chat():
     messages = fetch_messages()
     return render_template('chat.html', messages=messages)
 
-@socketio.on('connect')
-def handle_connect():
-    users[request.sid] = {'username': None, 'visible': False}
-    emit_online_users_count()
-
-@socketio.on('disconnect')
-def handle_disconnect():
-    if request.sid in users:
-        del users[request.sid]
-    emit_online_users_count()
-
 @socketio.on('page_visible')
 def handle_page_visible():
-    if request.sid in users:
-        users[request.sid]['visible'] = True
-    emit_online_users_count()
+    global users_online
+    users_online += 1
+    socketio.emit('users_online', users_online, broadcast=True)
 
 @socketio.on('page_hidden')
 def handle_page_hidden():
-    if request.sid in users:
-        users[request.sid]['visible'] = False
-    emit_online_users_count()
-
-def emit_online_users_count():
-    visible_users = len([user for user in users.values() if user['visible']])
-    socketio.emit('users_online', visible_users, broadcast=True)
+    global users_online
+    users_online -= 1
+    socketio.emit('users_online', users_online, broadcast=True)
 
 @socketio.on('message')
 def handle_message(data):
