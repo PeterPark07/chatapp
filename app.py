@@ -42,13 +42,13 @@ def chat():
 def handle_page_visible():
     global users_online
     users_online += 1
-    socketio.emit('users_online', users_online, broadcast=True)
+    emit('users_online', users_online, broadcast=True)
 
 @socketio.on('disconnect')
 def handle_page_hidden():
     global users_online
     users_online -= 1
-    socketio.emit('users_online', users_online, broadcast=True)
+    emit('users_online', users_online, broadcast=True)
 
 
 
@@ -56,13 +56,13 @@ def handle_page_hidden():
 def handle_page_visible():
     global users_online
     users_online += 1
-    socketio.emit('users_online', users_online, broadcast=True)
+    emit('users_online', users_online, broadcast=True)
 
 @socketio.on('page_hidden')
 def handle_page_hidden():
     global users_online
     users_online -= 1
-    socketio.emit('users_online', users_online, broadcast=True)
+    emit('users_online', users_online, broadcast=True)
 
 @socketio.on('message')
 def handle_message(data):
