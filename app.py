@@ -37,11 +37,11 @@ def chat():
     messages = fetch_messages()
     return render_template('chat.html', messages=messages)
 
-
 @socketio.on('connect')
 def handle_page_visible():
     global users_online
     users_online += 1
+    print('connect')
     emit('users_online', users_online, broadcast=True)
 
 @socketio.on('disconnect')
@@ -50,12 +50,11 @@ def handle_page_hidden():
     users_online -= 1
     emit('users_online', users_online, broadcast=True)
 
-
-
 @socketio.on('page_visible')
 def handle_page_visible():
     global users_online
     users_online += 1
+    print('page visible ')
     emit('users_online', users_online, broadcast=True)
 
 @socketio.on('page_hidden')
