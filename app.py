@@ -14,9 +14,6 @@ socketio = SocketIO(app)
 # Directory to save downloaded music files
 MUSIC_DIR = 'static/music'
 
-# Track connected users and their visibility state
-users_online = 0
-
 # Store last message details in memory for quick access
 last_message_details = {
     'username': None,
@@ -37,31 +34,35 @@ def chat():
     messages = fetch_messages()
     return render_template('chat.html', messages=messages)
 
+users = {}
+
 @socketio.on('connect')
-def handle_page_visible():
-    global users_online
-    users_online += 1
-    print('connect')
-    emit('users_online', users_online, broadcast=True)
+def handle_connect():
+    users[request.sid] = {'username': None, 'visible': True}
+    emit_online_users_count()
 
 @socketio.on('disconnect')
-def handle_page_hidden():
-    global users_online
-    users_online -= 1
-    emit('users_online', users_online, broadcast=True)
+def handle_disconnect():
+    if request.sid in users:
+        del users[request.sid]
+    emit_online_users_count()
 
 @socketio.on('page_visible')
 def handle_page_visible():
-    global users_online
-    users_online += 1
-    print('page visible ')
-    emit('users_online', users_online, broadcast=True)
+    if request.sid in users:
+        users[request.sid]['visible'] = True
+    emit_online_users_count()
 
 @socketio.on('page_hidden')
 def handle_page_hidden():
-    global users_online
-    users_online -= 1
-    emit('users_online', users_online, broadcast=True)
+    if request.sid in users:
+        users[request.sid]['visible'] = False
+    emit_online_users_count()
+
+def emit_online_users_count():
+    print(users)
+    visible_users = len([user for user in users.values() if user['visible']])
+    socketio.emit('users_online', visible_users, broadcast=True)
 
 @socketio.on('message')
 def handle_message(data):
