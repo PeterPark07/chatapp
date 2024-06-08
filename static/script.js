@@ -154,4 +154,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
         messageInput.value = '';
         messageInput.focus();  // Keep the input field focused
     });
+
+    // Visibility API to track page visibility
+    document.addEventListener('visibilitychange', function() {
+        if (document.visibilityState === 'visible') {
+            socket.emit('page_visible');
+        } else {
+            socket.emit('page_hidden');
+        }
+    });
 });
