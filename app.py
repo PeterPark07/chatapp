@@ -62,7 +62,7 @@ def handle_page_hidden():
 def emit_online_users_count():
     print(users)
     visible_users = len([user for user in users.values() if user['visible']])
-    socketio.emit('users_online', visible_users, broadcast=True)
+    emit('users_online', visible_users, broadcast=True)
 
 @socketio.on('message')
 def handle_message(data):
