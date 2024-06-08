@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_socketio import SocketIO, send, emit
 from helper import get_current_time, get_current_date
 from music import download_music, delete_music_folder
@@ -11,9 +11,11 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
 socketio = SocketIO(app)
 
-users_online = 0
 # Directory to save downloaded music files
 MUSIC_DIR = 'static/music'
+
+# Track connected users and their visibility state
+users = {}
 
 # Store last message details in memory for quick access
 last_message_details = {
@@ -37,15 +39,30 @@ def chat():
 
 @socketio.on('connect')
 def handle_connect():
-    global users_online
-    users_online += 1
-    emit('users_online', users_online, broadcast=True)
+    users[request.sid] = {'username': None, 'visible': False}
+    emit_online_users_count()
 
 @socketio.on('disconnect')
 def handle_disconnect():
-    global users_online
-    users_online -= 1
-    emit('users_online', users_online, broadcast=True)
+    if request.sid in users:
+        del users[request.sid]
+    emit_online_users_count()
+
+@socketio.on('page_visible')
+def handle_page_visible():
+    if request.sid in users:
+        users[request.sid]['visible'] = True
+    emit_online_users_count()
+
+@socketio.on('page_hidden')
+def handle_page_hidden():
+    if request.sid in users:
+        users[request.sid]['visible'] = False
+    emit_online_users_count()
+
+def emit_online_users_count():
+    visible_users = len([user for user in users.values() if user['visible']])
+    socketio.emit('users_online', visible_users, broadcast=True)
 
 @socketio.on('message')
 def handle_message(data):
@@ -58,7 +75,7 @@ def handle_message(data):
 
     if message.startswith('/theme'):
         theme_commands = message.split()
-        
+
         # Handle theme number (1, 2, 3)
         if '1' in theme_commands:
             emit('change_theme', '1', broadcast=True)
@@ -66,7 +83,7 @@ def handle_message(data):
             emit('change_theme', '2', broadcast=True)
         elif '3' in theme_commands:
             emit('change_theme', '3', broadcast=True)
-        
+
         # Handle dark/light mode
         if 'dark' in theme_commands:
             emit('dark_mode', broadcast=True)
@@ -85,7 +102,7 @@ def handle_message(data):
         'date': current_date,
         'followed': followed
     }
-    
+
     # Broadcast message as followed or not followed
     if followed:
         emit('followed_message', new_message, broadcast=True)
@@ -113,7 +130,6 @@ def handle_message(data):
         emit('pause_music', broadcast=True)
 
     if message == '/play':
-        print('plauyuy')
         emit('unpause_music', broadcast=True)
     if message == '/loop':
         emit('loop_music', broadcast=True)
