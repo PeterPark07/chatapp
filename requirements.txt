@@ -3,6 +3,7 @@ gunicorn
 requests
 flask-socketio
 pymongo
-eventlet
-youtube-search-python 
+eventlet>=0.33.3
+greenlet>=2.0.2
+youtube-search-python
 yt-dlp
