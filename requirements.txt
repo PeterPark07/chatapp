@@ -1,9 +1,8 @@
 flask
-gunicorn
+gunicorn==21.2.0
 requests
 flask-socketio
 pymongo
-eventlet>=0.33.3
-greenlet>=2.0.2
+eventlet
 youtube-search-python
 yt-dlp
